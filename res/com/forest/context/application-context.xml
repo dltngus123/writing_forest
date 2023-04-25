@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans>
+	<!-- dataSource -->
+	<bean id="sqlSessionFactory" class="com.forest.datasource.OracleMybatisSqlSessionFactory" />
+
+	<!-- Repository Layer -->
+	<bean id="fundingDAO" class="com.forest.dao.FundingDAOImpl">
+		<property name="sqlSessionFactory" ref-value="sqlSessionFactory" />
+	</bean>
+
+	<bean id="notifyDAO" class="com.forest.dao.NotifyDAOImpl">
+		<property name="sqlSessionFactory" ref-value="sqlSessionFactory" />
+	</bean>
+
+	<bean id="memberDAO" class="com.forest.dao.MemberDAOImpl">
+		<property name="sqlSessionFactory" ref-value="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="likeCountDAO" class="com.forest.dao.LikeCountDAOImpl">
+		<property name="sqlSessionFactory" ref-value="sqlSessionFactory"/>		
+	</bean>
+	
+	<bean id="noticeDAO" class="com.forest.dao.NoticeDAOImpl">
+		<property name="sqlSessionFactory" ref-value="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="paymentDAO" class="com.forest.dao.PaymentDAOImpl">
+		<property name="sqlSessionFactory" ref-value="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="questionDAO" class="com.forest.dao.QuestionDAOImpl">
+		<property name="sqlSessionFactory" ref-value="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="writingDAO" class="com.forest.dao.WritingDAOImpl">
+		<property name="sqlSessionFactory" ref-value="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="replyDAO" class="com.forest.dao.ReplyDAOImpl">
+		<property name="sqlSessionFactory" ref-value="sqlSessionFactory" />
+	</bean>
+	
+	<!-- Service Layer -->
+	<bean id="fundingService" class="com.forest.service.FundingServiceImpl">
+		<property name="fundingDAO" ref-value="fundingDAO" />
+	</bean>
+
+	<bean id="notifyService" class="com.forest.service.NotifyServiceImpl">
+		<property name="notifyDAO" ref-value="notifyDAO" />
+	</bean>
+
+	<bean id="memberService" class="com.forest.service.MemberServiceImpl">
+		<property name="memberDAO" ref-value="memberDAO" />
+	</bean>
+	
+	<bean id="noticeService" class="com.forest.service.NoticeServiceImpl">
+		<property name="noticeDAO" ref-value="noticeDAO" />
+	</bean>
+	
+	<bean id="paymentService" class="com.forest.service.PaymentServiceImpl">
+		<property name="paymentDAO" ref-value="paymentDAO" />
+	</bean>
+	
+	<bean id="questionService" class="com.forest.service.QuestionServiceImpl">
+		<property name="questionDAO" ref-value="questionDAO" />
+	</bean>
+	
+	<bean id="writingService" class="com.forest.service.WritingServiceImpl">
+		<property name="writingDAO" ref-value="writingDAO" />
+	</bean>
+	
+	<bean id="replyService" class="com.forest.service.ReplyServiceImpl">
+		<property name="replyDAO" ref-value="replyDAO" />
+	</bean>
+
+	<bean id="likeCountService" class="com.forest.service.LikeCountServiceImpl">
+		<property name="likeCountDAO" ref-value="likeCountDAO"/>
+	</bean>
+</beans>

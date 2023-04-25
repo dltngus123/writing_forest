@@ -1,0 +1,119 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="Writing-Mapper">
+	<sql id="search">
+		<if test="searchType == 't'.toString()">
+			and writing_title like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'w'.toString()">
+			and member_id like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'c'.toString()">
+			and writing_content like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'tc'.toString()">
+			and (
+			writing_title like '%'||#{keyword}||'%'
+			or
+			writing_content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'cw'.toString()">
+			and (
+			member_id like '%'||#{keyword}||'%'
+			or
+			writing_content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'tcw'.toString()">
+			and (
+			writing_title like '%'||#{keyword}||'%'
+			or
+			member_id like '%'||#{keyword}||'%'
+			or
+			writing_content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+	</sql>
+	<select id="selectSearchWritingList" resultType="writing">		
+		select *
+		from(
+			select rownum as rnum,result.*
+			from (
+				select * 
+				from writings
+				where writing_num is not null
+				<include refid="search" />								
+				order by writing_num desc
+			) result		
+	<![CDATA[ 
+			where rownum <= #{endRow}
+		 )		 
+		where rnum > #{startRow} 
+	]]>
+	
+	</select>
+	
+	<select id="selectSearchWritingListCount" resultType="int">
+		select
+		count(*) 
+		from writings
+		where writing_num is not null
+		<include refid="search" />
+		order by writing_num desc
+		
+	</select>
+	<select id="selectWritingByWriting_num" parameterType="int" resultType="writing">
+		select 
+		* 
+		from writings
+		where writing_num=#{writing_num}
+	</select>
+	
+	<select id="selectWritingSequenceNextValue" resultType="int">
+		select writings_seq.nextVal
+		from dual
+	</select>
+	
+	<update id="increaseViewCount" parameterType="int">
+		update writings
+		set writing_view=writing_view+1
+		where writing_num=#{writing_num}
+	</update>
+	
+	<update id="insertWriting" parameterType="writing">
+		insert into 
+		writings(writing_num,writing_title,writing_stitle,member_id,writing_content,writing_himg)
+		values(#{writing_num},#{writing_title},#{writing_stitle},#{member_id},#{writing_content},#{writing_himg})
+	</update>	
+	
+		
+	<update id="updateWriting" parameterType="writing">
+		update writings
+		set 
+		writing_title=#{writing_title},content=#{writing_content}		
+		where writing_num=#{writing_num}
+	</update>
+	
+	<update id="deleteWriting" parameterType="int" >
+		delete 
+		from writings
+		where writing_num=#{writing_num}		
+	</update>	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

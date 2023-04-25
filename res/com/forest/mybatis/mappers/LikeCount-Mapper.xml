@@ -1,0 +1,58 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="LikeCount-Mapper">
+  
+  <select id="selectSearchLikeCountList" parameterType="int" resultType="likecount">
+  	select *
+  	from like_count
+  	where writing_num like '%'||#{writing_num}||'%' 
+  
+  </select>
+  
+  <select id="selectLikeCountByLikeCount_num" parameterType="int" resultType="likecount">
+ 		select *
+  		from like_count
+  		where likeCount_num like'%'||#{likecount_num}||'%'
+  </select>
+  <select id="selectLikeCountSequenceNextValue" resultType="int" >
+         select
+		 likecount_seq.nextVal
+		 from dual
+  
+  </select>
+  <update  id="insertLike_Count" parameterType="likecount">
+  		insert 
+  		into like_count(like_num,writing_num,member_id)
+  		values(#{like_num},#{writing_num},#{member_id})
+  
+  </update>
+  <update id="deleteLike_Count" parameterType="int">
+  		delete 
+		from like_count
+		where like_num=#{like_num}
+  
+  </update>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  </mapper>

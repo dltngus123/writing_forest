@@ -1,0 +1,69 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="Member-Mapper">
+	
+	<sql id="search">	
+		<if test="searchType == 'i'.toString()">
+			and member_id like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'p'.toString()">
+			and member_phone like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'e'.toString()">
+			and member_email like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'n'.toString()">
+			and member_name like '%'||#{keyword}||'%'			
+		</if>			
+	</sql>	
+	
+	<select id="selectSearchMemberList" resultType="member">
+		select
+		* 
+		from member
+		where member_id is not null
+		<include refid="search" />
+		order by member_regDate desc
+	</select>
+		<select id="selectSearchMemberListCount" resultType="int">
+		select
+		count(*) 
+		from member
+		where member_id is not null
+		<include refid="search" />
+		order by member_regDate desc
+	</select>
+	<update id="insertMember" parameterType="member">
+		insert into
+		member(member_id,member_pwd,member_email,member_phone,member_img,member_name,
+		member_authority,member_state,member_pr,member_category,member_nic)
+		values(#{member_id},#{member_pwd},#{member_email},#{member_phone},#{member_img},#{member_name},#{member_authority},#{member_state},#{member_pr},#{member_category},#{member_nic})	
+	</update>
+	<select id="selectMemberById" parameterType="str" resultType="member">
+		select *
+		from member
+		where member_id=#{member_id}	
+	</select>
+	<update id="updateMember" parameterType="member">
+		update member
+		set
+		member_pwd=#{member_pwd},member_email=#{member_email},member_phone=#{member_phone},member_name=#{member_name},member_pr=#{member_pr},
+		member_img=#{member_img},member_nic=#{member_nic},member_state=#{state},member_category=#{member_category},
+		
+		
+		<if test="authority != null">
+				,authority=#{authority}		
+		</if>
+		where member_id=#{member_id}
+	
+	</update>
+	
+	<update id="deleteMember" parameterType="str">
+		delete
+		from member
+		where member_id=#{member_id}
+	</update>
+	
+</mapper>

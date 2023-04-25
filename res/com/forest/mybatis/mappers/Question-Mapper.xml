@@ -1,0 +1,91 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="Question-Mapper">
+	
+	<sql id="search">
+		<if test="searchType == 'i'.toString()">
+			and  member_id like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 't'.toString()">
+			and q_title like '%'||#{keyword}||'%'			
+		</if>
+		</sql>
+				
+	<select id="selectSearchQuestionList" resultType="question">		
+		select *
+		from question
+		where q_num is not null
+		<include refid="search" />
+		order by q_date desc
+		<!-- select *
+			from(
+				select rownum as rnum,SearchQuestionResult.*				
+				from(
+			    	select * 
+					from question
+					where q_num is not null
+					
+					<include refid="search" />	
+					<![CDATA[			
+					order by q_date desc
+					) SearchQuestionResult
+				where rownum <=#{endRow}
+				)
+				where rnum>#{startRow}
+		]]> -->
+		
+	</select>
+	
+	
+	<select id="selectSearchQuestionListCount" resultType="int">
+		select
+		count(*) 
+		from question
+		where q_num is not null
+		<include refid="search" />
+		order by q_date desc
+		
+	</select>
+	
+	<select id="selectQuestionByq_num" parameterType="int" resultType="question">
+		select 
+		* 
+		from question
+		where q_num=#{q_num}
+	</select>
+	
+	<select id="selectQuestionSequenceNextValue" resultType="int">
+		select question_seq.nextVal
+		from dual
+	</select>
+	
+	<update id="insertQuestion" parameterType="question">
+		insert into 
+		question(q_num,q_title,q_content,member_id)
+		values(#{q_num},#{q_title},#{q_content},#{member_id})
+	</update>	
+	
+		
+	<update id="updateQuestion" parameterType="question">
+		update question
+		set 
+		q_title=#{q_title},q_content=#{q_content}		
+		where q_num=#{q_num}
+	</update>
+	
+	<update id="updateQuestionAnswer" parameterType="question">
+		update question
+		set 
+		q_answer=#{q_answer},manager_id=#{manager_id}		
+		where q_num=#{q_num}
+	</update>
+	
+	<update id="deleteQuestion" parameterType="int" >
+		delete 
+		from question
+		where q_num=#{q_num}		
+	</update>	
+	
+</mapper>

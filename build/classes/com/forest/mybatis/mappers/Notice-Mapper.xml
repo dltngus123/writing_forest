@@ -1,0 +1,112 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="Notice-Mapper">
+	
+	<sql id="search">
+		<if test="searchType == 't'.toString()">
+			and notice_title like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'w'.toString()">
+			and  manager_id like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'c'.toString()">
+			and notice_content like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'tc'.toString()">
+			and (
+			notice_title like '%'||#{keyword}||'%'
+			or
+			notice_content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'cw'.toString()">
+			and (
+			manager_id like '%'||#{keyword}||'%'
+			or
+			notice_content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'tcw'.toString()">
+			and (
+			notice_title like '%'||#{keyword}||'%'
+			or
+			manager_id like '%'||#{keyword}||'%'
+			or
+			notice_content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+	</sql>
+	<select id="selectSearchNoticeList" resultType="notice">
+		select *
+		from notice
+		where notice_num is not null
+		order by notice_date desc	
+		<!-- select *
+			from(
+				select rownum as rnum,SearchNoticeResult.*				
+				from(
+			    	select * 
+					from notice
+					where notice_num is not null
+					
+					<include refid="search" />	
+					<![CDATA[			
+					order by notice_date desc
+					) SearchNoticeResult
+				where rownum <=#{endRow}
+				)
+				where rnum>#{startRow}
+		]]> -->
+		
+	</select>
+	
+	<select id="selectSearchNoticeListCount" resultType="int">
+		select
+		count(*) 
+		from notice
+		where notice_num is not null
+		<include refid="search" />
+		order by notice_date desc
+		
+	</select>
+	<select id="selectNoticeBynotice_num" parameterType="int" resultType="notice">
+		select 
+		* 
+		from notice
+		where notice_num=#{notice_num}
+	</select>
+	
+	<select id="selectNoticeSequenceNextValue" resultType="int">
+		select notice_seq.nextVal
+		from dual
+	</select>
+	
+	<update id="increasenotice_view" parameterType="int">
+		update notice
+		set notice_view=notice_view+1
+		where notice_num=#{notice_num}
+	</update>
+	
+	<update id="insertNotice" parameterType="notice">
+		insert into 
+		notice(notice_num,notice_title,manager_id,notice_content)
+		values(#{notice_num},#{notice_title},#{manager_id},#{notice_content})
+	</update>	
+	
+		
+	<update id="updateNotice" parameterType="notice">
+		update notice 
+		set 
+		notice_title=#{notice_title},notice_content=#{notice_content}		
+		where notice_num=#{notice_num}
+	</update>
+	
+	<update id="deleteNotice" parameterType="int" >
+		delete 
+		from notice 
+		where notice_num=#{notice_num}		
+	</update>	
+	
+</mapper>

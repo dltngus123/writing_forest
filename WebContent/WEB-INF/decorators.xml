@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decorators defaultdir="/WEB-INF/decorator">
+   
+   <decorator name="common" page="common_decorator.jsp">
+      <pattern>/common/*.do</pattern>
+      <pattern>/common/**/*.do</pattern>
+   </decorator>
+   
+   <decorator name="user" page="user_decorator.jsp">
+      <pattern>/user/*.do</pattern>
+      <pattern>/user/**/*.do</pattern>
+   </decorator>
+   
+   <decorator name="writer" page="writer_decorator.jsp">
+      <pattern>/writer/*.do</pattern>
+      <pattern>/writer/**/*.do</pattern>
+   </decorator>
+   
+   <decorator name="manager" page="manager_decorator.jsp">
+      <pattern>/manager/*.do</pattern>
+      <pattern>/manager/**/*.do</pattern>
+   </decorator>
+   
+    <decorator name="openWindow" page="open_decorator.jsp">
+      <pattern>/common/login.do</pattern>
+      <pattern>/common/loginForm.do</pattern>
+      <pattern>/common/joinForm.do</pattern>
+      <pattern>/common/join2Form.do</pattern>
+      <pattern>/common/forgetID.do</pattern>
+      <pattern>/common/forgetPwd.do</pattern>
+   </decorator>
+   
+   <excludes>
+      <pattern>/resources/*</pattern>
+   </excludes>
+</decorators>

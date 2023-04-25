@@ -1,0 +1,86 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="Payment-Mapper">
+
+	<sql id="search">
+		
+		<if test="searchType == 'i'.toString()">
+			and  member_id like '%'||#{keyword}||'%'			
+		</if>
+	</sql>
+	
+	<select id="selectSearchPaymentList" resultType="payment">		
+		<!-- select *
+		from payment
+		where pay_num is not null
+		order by pay_date desc -->
+		
+		select *
+			from(
+				select rownum as rnum,Result.*				
+				from(
+			    	select * 
+					from payment
+					where pay_num is not null
+					
+					<include refid="search" />	
+					<![CDATA[			
+					order by pay_num desc
+					) Result
+				where rownum <=#{endRow}
+				)
+				where rnum>#{startRow}
+		]]>
+		
+	</select>
+	
+	<select id="selectSearchPaymentListCount"   resultType="int">
+		select
+		count(*) 
+		from payment
+		where pay_num is not null
+		<include refid="search" />
+		order by pay_date desc
+		
+	</select>
+	
+	<select id="selectSearchPaymentMemberCount" parameterType="int" resultType="int">
+		select count(*)
+		from payment
+		where fun_num = #{fun_num}
+	</select>
+	
+	<select id="selectSearchPaymentTotalMoney" parameterType="int" resultType="int">
+	select sum(pay_amount)
+	from payment
+	where fun_num=#{fun_num}
+</select>
+	
+	<select id="selectPaymentByPay_num" parameterType="int" resultType="payment">
+		select 
+		* 
+		from payment
+		where pay_num=#{pay_num}
+	</select>
+	
+	<select id="selectPaymentSequenceNextValue" resultType="int">
+		select payment_seq.nextVal
+		from dual
+	</select>
+	
+	
+	<update id="insertPayment" parameterType="payment">
+		insert into 
+		payment(pay_num,pay_amount,member_id,fun_num)
+		values(#{pay_num},#{pay_amount},#{member_id},#{fun_num})
+	</update>	
+	
+	<update id="deletePayment" parameterType="int" >
+		delete 
+		from payment
+		where pay_num=#{pay_num}		
+	</update>	
+	
+</mapper>

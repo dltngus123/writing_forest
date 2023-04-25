@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="com/forest/properties/db.properties" />
+	
+	<typeAliases>
+		<typeAlias type="java.lang.String" alias="str" />
+		<typeAlias type="java.lang.Integer" alias="int" />
+		
+		<typeAlias type="com.forest.dto.FundingVO"  alias="funding"/>
+		<typeAlias type="com.forest.dto.NotifyVO"  alias="notify"/>
+		<typeAlias type="com.forest.dto.LikeCountVO"  alias="likecount"/>
+		<typeAlias type="com.forest.dto.NoticeVO"  alias="notice"/>
+		<typeAlias type="com.forest.dto.WritingVO"  alias="writing"/>
+		<typeAlias type="com.forest.dto.QuestionVO"  alias="question"/>
+		<typeAlias type="com.forest.dto.PaymentVO"  alias="payment"/>
+		<typeAlias type="com.forest.dto.MemberVO"  alias="member"/>
+		<typeAlias type="com.forest.dto.ReplyVO"  alias="reply"/>
+	</typeAliases>
+	
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED"> <!-- dbcp를 사용한다 -->
+				<property name="driver" value="${db.driverClassName}" />
+				<property name="url" value="${db.url}" />
+				<property name="username" value="${db.username}" />
+				<property name="password" value="${db.password}" />
+				
+				<!-- pool setting -->
+				<property value="2" name="poolMaximumActiveConnections"/> <!-- dbcp pool에대한설정 -->
+				<property value="2" name="poolMaximumIdleConnections"/> <!-- dbcp pool에대한설정 -->
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="com/forest/mybatis/mappers/Funding-Mapper.xml"/>
+		<mapper resource="com/forest/mybatis/mappers/Member-Mapper.xml"/>
+		<mapper resource="com/forest/mybatis/mappers/Notify-Mapper.xml"/>
+		<mapper resource="com/forest/mybatis/mappers/Notice-Mapper.xml"/>
+		<mapper resource="com/forest/mybatis/mappers/Writing-Mapper.xml"/>
+		<mapper resource="com/forest/mybatis/mappers/Payment-Mapper.xml"/>
+		<mapper resource="com/forest/mybatis/mappers/Question-Mapper.xml"/>
+		<mapper resource="com/forest/mybatis/mappers/Reply-Mapper.xml"/>
+		<mapper resource="com/forest/mybatis/mappers/LikeCount-Mapper.xml"/>
+	</mappers>
+
+</configuration>
